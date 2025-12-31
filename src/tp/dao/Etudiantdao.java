@@ -110,6 +110,28 @@ public class Etudiantdao {
         pstmt.executeUpdate();
         conn.close();
     }
+    
+    public Etudiant findById(int id) throws SQLException {
+        Connection conn = ConnexionBD.getConnection();
+        String sql = "SELECT * FROM test WHERE id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return new Etudiant(
+                    rs.getInt("id"),
+                    rs.getString("nom"),
+                    rs.getString("email"),
+                    rs.getDouble("moyenne")
+                );
+            }
+            return null;
+        } finally {
+            conn.close();
+        }
+    }
 
 
 }
